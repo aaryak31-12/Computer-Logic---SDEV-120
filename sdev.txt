@@ -1,0 +1,62 @@
+Start
+INTEGER areaCode
+INTEGER phoneNumber
+INTEGER numTexts
+INTEGER = 5.00
+INTEGER taxRate = 0.14
+INTEGER sentinelValue = -1
+INTEGER specificAreaCode
+BOOLEAN showCustomerDetails
+
+OUTPUT "Enter a specific three-digit area code to view bills (or -1 to skip filtering):"
+INPUT specificAreaCode
+WHILE true DO
+    OUTPUT "Enter area code (or -1 to stop):"
+    INPUT areaCode
+    IF areaCode == sentinelValue THEN
+        BREAK  
+    ENDIF
+
+    OUTPUT "Enter phone number (7 digits):"
+    INPUT phoneNumber
+    OUTPUT "Enter the total number of text messages sent:"
+    INPUT numTexts
+    INPUT basefee
+    
+    IF numTexts <= 100 THEN
+        SET totalBill = baseFee
+    ELSE IF numTexts <= 300 THEN
+        SET totalBill = baseFee + (numTexts - 100) * 0.03
+    ELSE
+        SET totalBill = baseFee + (200 * 0.03) + (numTexts - 300) * 0.02
+    ENDIF
+
+    
+    SET totalBill = totalBill + (totalBill * taxRate)
+
+    SET showCustomerDetails = false
+    IF numTexts > 100 THEN
+        SET showCustomerDetails = true  
+    ENDIF
+
+    IF totalBill > 10 THEN
+        SET showCustomerDetails = true  
+    ENDIF
+
+    IF specificAreaCode != -1 AND areaCode == specificAreaCode THEN
+        SET showCustomerDetails = true  
+    ENDIF
+
+    IF showCustomerDetails THEN
+        OUTPUT "Customer details:"
+        OUTPUT "Area Code: " + str(areaCode)
+        OUTPUT "Phone Number: " + str(phoneNumber)
+        OUTPUT "Number of Text Messages: " + str(numTexts)
+        OUTPUT "Monthly Bill (before tax): $" + str((totalBill / (1 + taxRate)))
+        OUTPUT "Monthly Bill (after tax): $" + str(totalBill)
+    ELSE
+        OUTPUT "No details to display for this customer based on the conditions."
+    END IF
+END WHILE
+
+Stop
